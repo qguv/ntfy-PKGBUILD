@@ -1,0 +1,20 @@
+--- ntfy/__init__.py	2018-11-23 23:42:53.000000000 +0100
++++ ntfy/__init__.py	2023-05-04 10:53:35.950193733 +0200
+@@ -3,7 +3,7 @@
+ from os import getcwd, path, name
+ from socket import gethostname
+ from importlib import import_module
+-from inspect import getargspec
++from inspect import getfullargspec
+ from .backends.default import DefaultNotifierError
+ 
+ __version__ = '2.7.0'
+@@ -65,7 +65,7 @@
+                 notifier = e.module
+                 e = e.exception
+ 
+-            args, _, _, defaults = getargspec(notifier.notify)
++            args, _, _, defaults, _, _, _ = getfullargspec(notifier.notify)
+             possible_args = set(args)
+             required_args =  set(args) if defaults is None else set(args[:-len(defaults)])
+             required_args -= set(['title', 'message', 'retcode'])

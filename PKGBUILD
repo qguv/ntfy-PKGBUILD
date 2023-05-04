@@ -3,7 +3,7 @@
 
 pkgname=ntfy
 pkgver=2.7.0
-pkgrel=2
+pkgrel=3
 pkgdesc="A utility for sending push notifications to different backends (Pushover, Pushbullet, XMPP and various desktop notification systems)"
 url="https://github.com/dschep/ntfy"
 depends=('python' 'python-requests' 'python-yaml' 'python-appdirs' 'xorg-xprop' 'python-ruamel-yaml')
@@ -11,8 +11,15 @@ makedepends=('python3' 'python-setuptools')
 optdepends=('python-dbus' 'python-emoji' )
 license=('GPLv3')
 arch=('any')
-source=(https://github.com/dschep/ntfy/archive/v$pkgver.tar.gz)
-md5sums=('c468c732cac0b4641af93b3ac95c6412')
+source=(https://github.com/dschep/ntfy/archive/v$pkgver.tar.gz
+        0001-python-3-11.patch)
+md5sums=('c468c732cac0b4641af93b3ac95c6412'
+         'cb56011dd1e265a804581bd84450ea2c')
+
+prepare() {
+    cd "$srcdir/${pkgname}-${pkgver}"
+    patch -p0 < ../../0001-python-3-11.patch
+}
 
 build() {
     cd "$srcdir/${pkgname}-${pkgver}"
@@ -21,5 +28,5 @@ build() {
 
 package() {
     cd "$srcdir/${pkgname}-${pkgver}"
-    python setup.py install --root="$pkgdir" --optimize=1 
+    python setup.py install --root="$pkgdir" --optimize=1
 }
